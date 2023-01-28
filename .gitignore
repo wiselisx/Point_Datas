@@ -1,9 +1,7 @@
 
-*.ply
-training_50_classes/dataset_description.pdf
-training_50_classes/Lille1_annotations.txt
-*.txt
 *.xml
-*.zip
-*.pdf
 *.iml
+*.ply
+*.pdf
+*.txt
+*.zip
