@@ -131,10 +131,15 @@ class ReadDatas:
         for ik in range(number):
             [_, idx, _] = kdtree.search_knn_vector_3d(clouds.points[ik], neighbour_number)  # K近邻搜索
             point_neighbours[ik, :] = idx
+            
         return point_neighbours 
     
-    def region_growing_segmentation(self,seed,clouds,no_paves):
+    def region_growing_segmentation(self,clouds):
 
+        seed = self.seed_select(clouds)
+        no_paves = self.find_no_paves(clouds)
+        # np_clouds = np.asarray(clouds)
+        no_paves = self.find_index(self.ground, no_paves)
         nebor_all = self.find_neighbour_points(clouds)
         curvity = self.curvature_calculation(clouds)
 
@@ -168,7 +173,54 @@ class ReadDatas:
     
         return paves
 
- 
+
+    def seed_select(self,ground):
+
+
+        vis = o3d.visualization.VisualizerWithEditing()
+        vis.create_window(window_name='Open3D', visible=True)
+        vis.add_geometry(ground)
+        vis.run()
+        seed = vis.get_picked_points()
+        vis.destroy_window()
+
+        return seed
+    
+    def paves_cutting(self,ground):    
+        vis = o3d.visualization.VisualizerWithEditing()
+        vis.create_window(window_name='Open3D', visible=True)
+        vis.add_geometry(ground)
+        vis.run()
+        geometry = vis.get_cropped_geometry()
+        vis.destroy_window()
+        geometry = np.asarray(geometry.points)
+
+        return geometry
+    
+    def find_no_paves(self,ground):
+        a = True
+        geometrys = np.zeros((1,3))
+
+        while a:
+            geometry = self.paves_cutting(ground)
+            geometrys = np.concatenate((geometrys,geometry),axis=0)
+            input_1 = input('按Y或者y继续')
+            if input_1 == 'y' or input_1 == 'Y':
+                a = True
+            else:
+                a = False
+        geometrys = np.delete(geometrys, [0], axis=0)
+
+        return geometrys
+    
+    def find_index(self,list1,list2):
+        index = []
+        for i in list2:
+            a = (list1 == i).all(axis=1)
+            a = np.argwhere(a).ravel()
+            if a:
+                index.append(a[0])
+        return index
                 
 
     
@@ -186,15 +238,9 @@ if __name__ == '__main__':
     print(datas.datas)
     datas.gpf_ground_extraction()
     
-    clouds = datas.np_to_o3d(datas.ground,name = 'clouds')
-    curvity = datas.curvature_calculation(clouds)
+    clouds = datas.np_to_o3d(datas.ground)
     print('-----------')
-    seed = np.argmin(curvity)
-    seed = np.array([seed])
-    print('-----------')
-    neighbors = datas.find_neighbour_points(clouds)
-    print('-----------')
-    paves = datas.region_growing_segmentation(seed, neighbors,curvity,clouds)
+    paves = datas.region_growing_segmentation(clouds)
     print('-----------')
     print(len(paves))
     print('-----------')
