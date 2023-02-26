@@ -243,7 +243,7 @@ class ReadDatas:
 
         neighbour_number = 1
         kdtree = o3d.geometry.KDTreeFlann(clouds1)
-        number = len(ground.points)
+        number = len(clouds2.points)
 
         point_neighbours = np.zeros((number, neighbour_number))
         for ik in range(number):
@@ -327,7 +327,7 @@ class ReadDatas:
 
 
 if __name__ == '__main__':
-    datas = ReadDatas('Point Cloud Data\Corner.ply')
+    datas = ReadDatas('D:\project\Point_Datas\Point Cloud Data\Corner.ply')
     datas.gpf_ground_extraction()
     ground = datas.np_to_o3d(datas.ground)
     point = datas.seed_select(ground)
