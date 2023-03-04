@@ -4,6 +4,7 @@ import open3d as o3d
 
 
 class ReadDatas:
+    
 
     def __init__(self, cloud):
 
@@ -247,8 +248,8 @@ class ReadDatas:
 
         point_neighbours = np.zeros((number, neighbour_number))
         for ik in range(number):
-            [_, point[0], _] = kdtree.search_knn_vector_3d(clouds2.points[ik], neighbour_number)  # K近邻搜索
-            point_neighbours[ik, :] = point[0]
+            [_, idx, _] = kdtree.search_knn_vector_3d(clouds2.points[ik], neighbour_number)  # K近邻搜索
+            point_neighbours[ik, :] = idx
         return point_neighbours
     
     def driving_path_extraction(self,ground,driving_track,point_neighbours):
@@ -276,7 +277,7 @@ class ReadDatas:
                 a = a_jiao > cosine_threshold
                 d = slim[a]
                 paves = np.concatenate((paves,d),axis=0)
-        # pave = np.delete(pave,0)
+        paves = np.delete(paves,0,0)
         return paves
     
     def euclidean_cluster(self,cloud,point, tolerance=0.2, min_cluster_size=100, max_cluster_size=1000000000000):
@@ -327,22 +328,23 @@ class ReadDatas:
 
 
 if __name__ == '__main__':
-    datas = ReadDatas('D:\project\Point_Datas\Point Cloud Data\Corner.ply')
+    datas = ReadDatas('Point Cloud Data\Corner.ply')
     datas.gpf_ground_extraction()
     ground = datas.np_to_o3d(datas.ground)
+    o3d.visualization.draw_geometries([datas.datas])
     point = datas.seed_select(ground)
-    geometrys = datas.find_no_paves(ground)
+    # geometrys = datas.find_no_paves(ground)
     driving_track = datas.driving_path_generation(point,ground)
     driving_track_o3d = datas.np_to_o3d(driving_track)
     ground += driving_track_o3d
     point_neighbours = datas.find_nearest_point(driving_track_o3d,ground)
     pave = datas.driving_path_extraction(ground,driving_track,point_neighbours)
-    seed = datas.find_index(pave,geometrys)
-    paves = np.delete(pave,seed,0)
-    paves = datas.np_to_o3d(paves)
-    ec = datas.euclidean_cluster(paves,point, tolerance=0.1, min_cluster_size=1000, max_cluster_size=100000000)
-    ec = paves.select_by_index(ec)
-    o3d.visualization.draw_geometries([ec])
+    # seed = datas.find_index(pave,geometrys)
+    # paves = np.delete(pave,seed,0)
+    paves = datas.np_to_o3d(pave)
+    # ec = datas.euclidean_cluster(paves,point, tolerance=0.1, min_cluster_size=1000, max_cluster_size=100000000)
+    # ec = paves.select_by_index(ec)
+    o3d.visualization.draw_geometries([paves])
 
 
     
