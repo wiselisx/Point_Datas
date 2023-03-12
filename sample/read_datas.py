@@ -15,7 +15,6 @@ class ReadDatas:
         self.non_ground = None
         self.neighbour_number = 30
         self.curvity = []
-
         self.theta_threshold = 15
         self.cosine_threshold = np.cos(np.deg2rad(self.theta_threshold))
         self.curvature_threshold = 0.035
@@ -331,20 +330,7 @@ if __name__ == '__main__':
     datas = ReadDatas('Point Cloud Data\Corner.ply')
     datas.gpf_ground_extraction()
     ground = datas.np_to_o3d(datas.ground)
-    o3d.visualization.draw_geometries([datas.datas])
-    point = datas.seed_select(ground)
-    # geometrys = datas.find_no_paves(ground)
-    driving_track = datas.driving_path_generation(point,ground)
-    driving_track_o3d = datas.np_to_o3d(driving_track)
-    ground += driving_track_o3d
-    point_neighbours = datas.find_nearest_point(driving_track_o3d,ground)
-    pave = datas.driving_path_extraction(ground,driving_track,point_neighbours)
-    # seed = datas.find_index(pave,geometrys)
-    # paves = np.delete(pave,seed,0)
-    paves = datas.np_to_o3d(pave)
-    # ec = datas.euclidean_cluster(paves,point, tolerance=0.1, min_cluster_size=1000, max_cluster_size=100000000)
-    # ec = paves.select_by_index(ec)
-    o3d.visualization.draw_geometries([paves])
+    
 
 
     
