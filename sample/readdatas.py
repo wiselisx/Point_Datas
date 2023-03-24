@@ -329,3 +329,4 @@ if __name__ == '__main__':
     ground = ground_np.select_by_index(pcd.no_paves, invert = True)
     o3d.visualization.draw_geometries([ground])
     print('结束')
+    
