@@ -79,6 +79,21 @@ class BaseAlgorithm(ABC):
 
         return point_neighbours
     
+    def colormap(self,value):
+        colors = np.zeros([value.shape[0], 3])
+        value_max = np.max(value)
+        value_min = np.min(value)
+        delta_c = abs(value_max - value_min) / (255 * 2)
+        color_n = (value- value_min) / delta_c
+        a = color_n <= 255
+        b = color_n > 255
+        colors[a, 1] = 1 - color_n[a] / 255
+        colors[a, 2] = 1
+        colors[b, 0] = (color_n[b]-255) / 255
+        colors[b, 2] = 1
+
+        return colors
+    
     def seed_select(self, cloud):
         vis = o3d.visualization.VisualizerWithEditing()
         vis.create_window(window_name='Open3D', visible=True)
