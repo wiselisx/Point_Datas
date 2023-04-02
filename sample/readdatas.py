@@ -2,7 +2,7 @@
 Author: 夜间清风 1874032283@qq.com
 Date: 2023-03-04 20:05:50
 LastEditors: 夜间清风 1874032283@qq.com
-LastEditTime: 2023-03-12 15:31:14
+LastEditTime: 2023-04-01 15:45:28
 FilePath: \Point_Datas\sample\readdatas.py
 Description: 软件代码的算法部分。
 '''
@@ -20,7 +20,7 @@ class ReadDatas:
         self.path: str = path
         self.pcd: PointCloud = self.read_point_cloud()
         self.pcd_np = np.asarray(self.pcd.points)
-        self.theta_threshold = 30
+        self.theta_threshold = 15
         self.cosine_threshold = np.cos(np.deg2rad(self.theta_threshold))
         self.curvature_threshold = 0.035
 
@@ -341,7 +341,7 @@ if __name__ == '__main__':
     be.set_data(pcd)
     be._process_data()
     ground_np = be.np_to_o3d(pcd.ground)
-    ground = ground_np.select_by_index(pcd.no_paves, invert = True)
+    ground = ground_np.select_by_index(pcd.no_paves)
     o3d.visualization.draw_geometries([ground])
-    print('结束')
+    print(len(pcd.no_paves))
     
