@@ -15,24 +15,23 @@ from abc import ABC, abstractmethod
 
 class ReadDatas:
 
-
     def __init__(self, path: str) -> None:
         self.path: str = path
-        self.pcd: PointCloud = self.read_point_cloud()
+        self.pcd = self.read_point_cloud()
         self.pcd_np = np.asarray(self.pcd.points)
-        self.theta_threshold = 15
+        self.theta_threshold = 20
         self.cosine_threshold = np.cos(np.deg2rad(self.theta_threshold))
         self.curvature_threshold = 0.035
 
     def read_point_cloud(self) -> 'PointCloud':
         '''
         description: 读取点云文件
-        '''        
-        pcd: PointCloud= o3d.io.read_point_cloud(self.path)
+        '''
+        pcd = o3d.io.read_point_cloud(self.path)
         return pcd
 
-class BaseAlgorithm(ABC):
 
+class BaseAlgorithm(ABC):
 
     def __init__(self) -> None:
         self.data: None = None
@@ -49,17 +48,17 @@ class BaseAlgorithm(ABC):
     def _process_data(self) -> None:
         pass
 
-    def fit_plane(self,points):
+    def fit_plane(self, points):
         '''
         description: 利用PCA拟合平面
         '''
         centroid = np.mean(points, axis=0)
         centered = points - centroid
-        u, _, _ = np.linalg.svd(centered.T, full_matrices = False, compute_uv = True)
+        u, _, _ = np.linalg.svd(centered.T, full_matrices=False, compute_uv=True)
         normal = u[:, -1]
         intercept = -np.dot(normal, centroid)
         return normal, intercept
-    
+
     def np_to_o3d(self, points: 'ndarray'):
         name = ''
         name = o3d.geometry.PointCloud()
@@ -67,7 +66,7 @@ class BaseAlgorithm(ABC):
         name.estimate_normals()
 
         return name
-    
+
     def find_neighbour_points(self, clouds, neighbour_number=30):
         kdtree = o3d.geometry.KDTreeFlann(clouds)
         number = len(clouds.points)
@@ -78,22 +77,22 @@ class BaseAlgorithm(ABC):
             point_neighbours[ik, :] = idx
 
         return point_neighbours
-    
-    def colormap(self,value):
+
+    def colormap(self, value):
         colors = np.zeros([value.shape[0], 3])
         value_max = np.max(value)
         value_min = np.min(value)
         delta_c = abs(value_max - value_min) / (255 * 2)
-        color_n = (value- value_min) / delta_c
+        color_n = (value - value_min) / delta_c
         a = color_n <= 255
         b = color_n > 255
         colors[a, 1] = 1 - color_n[a] / 255
         colors[a, 2] = 1
-        colors[b, 0] = (color_n[b]-255) / 255
+        colors[b, 0] = (color_n[b] - 255) / 255
         colors[b, 2] = 1
 
         return colors
-    
+
     def seed_select(self, cloud):
         vis = o3d.visualization.VisualizerWithEditing()
         vis.create_window(window_name='Open3D', visible=True)
@@ -103,7 +102,7 @@ class BaseAlgorithm(ABC):
         vis.destroy_window()
 
         return seed
-    
+
     def find_index(self, list1, list2):
         # index = np.where((list1[:, None] == list2).all(-1))[1]
         # return index.tolist()
@@ -115,7 +114,6 @@ class BaseAlgorithm(ABC):
                 index.append(a[0])
         return index
 
-    
     def paves_cutting(self, ground):
         vis = o3d.visualization.VisualizerWithEditing()
         vis.create_window(window_name='Open3D', visible=True)
@@ -126,7 +124,7 @@ class BaseAlgorithm(ABC):
         geometry = np.asarray(geometry.points)
 
         return geometry
-    
+
     def find_no_paves(self, ground):
         a = True
         geometrys = np.zeros((1, 3))
@@ -142,8 +140,8 @@ class BaseAlgorithm(ABC):
         geometrys = np.delete(geometrys, [0], axis=0)
 
         return geometrys
-    
-    def curvature_calculation(self, clouds: 'o3d',neighbour_number = 30):
+
+    def curvature_calculation(self, clouds: 'o3d', neighbour_number=30):
         num_of_pts = len(clouds.points)  # 点云点的个数
         clouds.estimate_covariances(o3d.geometry.KDTreeSearchParamKNN(neighbour_number))
         cov_mat = clouds.covariances  # 获取每个点的协方差矩阵
@@ -160,7 +158,7 @@ class BaseAlgorithm(ABC):
 
         return self.data.curvity
 
-    def find_nearest_point(self,clouds1,clouds2,neighbour_number = 1):
+    def find_nearest_point(self, clouds1, clouds2, neighbour_number=1):
         neighbour_number = 1
         kdtree = o3d.geometry.KDTreeFlann(clouds1)
         number = len(clouds2.points)
@@ -170,57 +168,59 @@ class BaseAlgorithm(ABC):
             [_, idx, _] = kdtree.search_knn_vector_3d(clouds2.points[ik], neighbour_number)  # K近邻搜索
             point_neighbours[ik, :] = idx
         return point_neighbours
-    
-    def calculate_linear_density(self,clouds):
+
+    def calculate_linear_density(self, clouds):
         nndist = clouds.compute_nearest_neighbor_distance()
         nndist = np.array(nndist)
         density = np.mean(nndist)
         return density
 
-    def driving_path_generation(self,point,clouds):
+    def driving_path_generation(self, point, clouds):
         density = self.calculate_linear_density(clouds)
         driving_point = clouds.select_by_index(point)
         driving_point = np.array(driving_point.points)
 
         clouds = clouds.select_by_index(point, invert=True)
-        driving_distance = np.array([np.linalg.norm(driving_point[p] - driving_point[p+1]) for p in range(len(driving_point) - 1 )])
-        driving_track = np.array([[0,0,0]])
+        driving_distance = np.array(
+            [np.linalg.norm(driving_point[p] - driving_point[p + 1]) for p in range(len(driving_point) - 1)])
+        driving_track = np.array([[0, 0, 0]])
 
-        for i,d in enumerate(driving_distance):
+        for i, d in enumerate(driving_distance):
             num = int(d / density)
-            driving_track_x = np.linspace(driving_point[i,0],driving_point[i+1,0],num)
-            driving_track_y = np.linspace(driving_point[i,1],driving_point[i+1,1],num)
-            driving_track_z = np.linspace(driving_point[i,2],driving_point[i+1,2],num)
-            new_points = np.array([driving_track_x,driving_track_y,driving_track_z]).T
-            driving_track = np.concatenate((driving_track,new_points),axis=0)
+            driving_track_x = np.linspace(driving_point[i, 0], driving_point[i + 1, 0], num)
+            driving_track_y = np.linspace(driving_point[i, 1], driving_point[i + 1, 1], num)
+            driving_track_z = np.linspace(driving_point[i, 2], driving_point[i + 1, 2], num)
+            new_points = np.array([driving_track_x, driving_track_y, driving_track_z]).T
+            driving_track = np.concatenate((driving_track, new_points), axis=0)
 
-        driving_track = np.delete(driving_track,0,axis=0)
+        driving_track = np.delete(driving_track, 0, axis=0)
         return driving_track
-    
+
     def postprocess_data(self) -> None:
         # 公共的后处理逻辑
         pass
 
+
 class GpfGroundExtractor(BaseAlgorithm):
 
-
-     def _process_data(self,nlrp: int = 1000, thseeds: float = 0.1, ground_h: float = 0.15, iterations: int = 10):
-        xyz: ndarray = self.data.pcd_np
+    def _process_data(self, nlrp: int = 1000, thseeds: float = 0.1, ground_h: float = 0.15, iterations: int = 10):
+        xyz = self.data.pcd_np
         xyz = xyz[np.lexsort(xyz.T)]
         elevation_nlrp_min_mean: float = np.average(xyz[:nlrp, 2])
         seed = xyz[xyz[:, 2] < thseeds + elevation_nlrp_min_mean]
 
         for i in range(iterations):
             normal, intercept = self.fit_plane(seed)
-            h = (xyz[:, 0] * normal[0] + xyz[:, 1] * normal[1] + xyz[:, 2] * normal[2] + intercept) / np.linalg.norm(normal)
+            h = (xyz[:, 0] * normal[0] + xyz[:, 1] * normal[1] + xyz[:, 2] * normal[2] + intercept) / np.linalg.norm(
+                normal)
             seed = xyz[np.abs(h) < ground_h]
-            
+
         self.data.ground = seed
         self.data.no_ground = xyz[np.abs(h) >= ground_h]
 
+
 class CsfGroundExtractor(BaseAlgorithm):
-    
-    
+
     def _process_data(self, bSloopSmooth: 'bool' = False, cloth_resolution: float = 0.5) -> None:
         csf = CSF.CSF()
         csf.params.bSloopSmooth = bSloopSmooth
@@ -237,15 +237,16 @@ class CsfGroundExtractor(BaseAlgorithm):
         self.data.ground = self.data.pcd_np[self.ground, :]
         self.data.no_ground = self.data.pcd_np[self.no_ground, :]
 
-class RansacGroundExtractor(BaseAlgorithm):
 
+class RansacGroundExtractor(BaseAlgorithm):
 
     def _process_data(self, distance_threshold: float = 0.05, ransac_n: int = 3, num_iterations=1000) -> None:
         plane_model, inliers = self.data.pcd.segment_plane(distance_threshold=distance_threshold,
-                                                                        ransac_n=ransac_n, num_iterations=num_iterations)
+                                                           ransac_n=ransac_n, num_iterations=num_iterations)
         inliers = np.array(inliers)
         self.data.ground = self.data.pcd_np[inliers, :]
         self.data.no_ground = np.delete(self.data.pcd_np, inliers, axis=0)
+
 
 class GroundExtractor:
     def __init__(self):
@@ -259,8 +260,8 @@ class GroundExtractor:
         self.algorithm.set_data(data)
         self.algorithm._process_data()
 
-class ReGrowSegment(BaseAlgorithm):
 
+class ReGrowSegment(BaseAlgorithm):
 
     def _process_data(self) -> None:
         ground_np = self.np_to_o3d(self.data.ground)
@@ -271,7 +272,7 @@ class ReGrowSegment(BaseAlgorithm):
         nebor_all = self.find_neighbour_points(ground_np)
         curvity = self.curvature_calculation(ground_np)
         paves = np.array(seed)
-        
+
         while len(seed) > 0:
             seed_now = seed[0]
             nebor = nebor_all[seed_now]
@@ -298,8 +299,8 @@ class ReGrowSegment(BaseAlgorithm):
 
         self.data.paves = paves
 
-class DriPathSegment(BaseAlgorithm):
 
+class DriPathSegment(BaseAlgorithm):
 
     def _process_data(self):
         ground = self.data.ground
@@ -314,25 +315,26 @@ class DriPathSegment(BaseAlgorithm):
         driving_track = self.find_nearest_point(ground_o3d, driving_track_o3d)
 
         driving_track_o3d = ground_o3d.select_by_index(driving_track)
-        point_neighbours = self.find_nearest_point(driving_track_o3d,ground_o3d)
+        point_neighbours = self.find_nearest_point(driving_track_o3d, ground_o3d)
         driving_track = np.asarray(driving_track_o3d.points)
 
         for i in range(len(driving_track)):
-            slim = ground[point_neighbours[:,0] == i]
-            slim_index = index_all[point_neighbours[:,0] == i]
+            slim = ground[point_neighbours[:, 0] == i]
+            slim_index = index_all[point_neighbours[:, 0] == i]
             if len(slim) > 0:
-                slim_nor = ground_nor[point_neighbours[:,0] == i]
-                slim_distance = np.sqrt(np.sum(np.power(slim - driving_track[i,:],2),axis = 1))
+                slim_nor = ground_nor[point_neighbours[:, 0] == i]
+                slim_distance = np.sqrt(np.sum(np.power(slim - driving_track[i, :], 2), axis=1))
                 p = slim_distance.argmin()
-                p = slim_nor[p,:]
+                p = slim_nor[p, :]
                 a_jiao = np.fabs(np.dot(slim_nor, p))
                 c = a_jiao <= self.data.cosine_threshold
-                no_paves = np.concatenate((no_paves,slim_index[c]),axis=0)
-                
-        self.data.no_paves = np.delete(no_paves,0,0)
+                no_paves = np.concatenate((no_paves, slim_index[c]), axis=0)
 
-        
-        
+        self.data.no_paves = np.delete(no_paves, 0, 0)
+
+    
+
+
 if __name__ == '__main__':
     pcd = ReadDatas('D:\project\Point_Datas\Point Cloud Data\Corner.ply')
     ge = GroundExtractor()
@@ -344,4 +346,3 @@ if __name__ == '__main__':
     ground = ground_np.select_by_index(pcd.no_paves)
     o3d.visualization.draw_geometries([ground])
     print(len(pcd.no_paves))
-    
