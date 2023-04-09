@@ -2,7 +2,7 @@
 Author: 夜间清风 1874032283@qq.com
 Date: 2023-03-04 20:05:50
 LastEditors: 夜间清风 1874032283@qq.com
-LastEditTime: 2023-04-01 15:45:28
+LastEditTime: 2023-04-08 13:50:02
 FilePath: \Point_Datas\sample\readdatas.py
 Description: 软件代码的算法部分。
 '''
@@ -23,7 +23,7 @@ class ReadDatas:
         self.cosine_threshold = np.cos(np.deg2rad(self.theta_threshold))
         self.curvature_threshold = 0.035
 
-    def read_point_cloud(self) -> 'PointCloud':
+    def read_point_cloud(self):
         '''
         description: 读取点云文件
         '''
@@ -34,7 +34,7 @@ class ReadDatas:
 class BaseAlgorithm(ABC):
 
     def __init__(self) -> None:
-        self.data: None = None
+        self.data = None
 
     def set_data(self, data) -> None:
         self.data = data
@@ -59,7 +59,7 @@ class BaseAlgorithm(ABC):
         intercept = -np.dot(normal, centroid)
         return normal, intercept
 
-    def np_to_o3d(self, points: 'ndarray'):
+    def np_to_o3d(self, points):
         name = ''
         name = o3d.geometry.PointCloud()
         name.points = o3d.utility.Vector3dVector(points)
@@ -100,12 +100,9 @@ class BaseAlgorithm(ABC):
         vis.run()
         seed = vis.get_picked_points()
         vis.destroy_window()
-
         return seed
 
     def find_index(self, list1, list2):
-        # index = np.where((list1[:, None] == list2).all(-1))[1]
-        # return index.tolist()
         index = []
         for i in list2:
             a = (list1 == i).all(axis=1)
@@ -122,7 +119,6 @@ class BaseAlgorithm(ABC):
         geometry = vis.get_cropped_geometry()
         vis.destroy_window()
         geometry = np.asarray(geometry.points)
-
         return geometry
 
     def find_no_paves(self, ground):
@@ -248,19 +244,6 @@ class RansacGroundExtractor(BaseAlgorithm):
         self.data.no_ground = np.delete(self.data.pcd_np, inliers, axis=0)
 
 
-class GroundExtractor:
-    def __init__(self):
-        # 初始化处理器
-        pass
-
-    def process_data(self, data, algorithm):
-        self.algorithm = algorithm()
-
-        # 使用指定算法处理数据
-        self.algorithm.set_data(data)
-        self.algorithm._process_data()
-
-
 class ReGrowSegment(BaseAlgorithm):
 
     def _process_data(self) -> None:
@@ -336,13 +319,4 @@ class DriPathSegment(BaseAlgorithm):
 
 
 if __name__ == '__main__':
-    pcd = ReadDatas('D:\project\Point_Datas\Point Cloud Data\Corner.ply')
-    ge = GroundExtractor()
-    ge.process_data(pcd, CsfGroundExtractor)
-    be = DriPathSegment()
-    be.set_data(pcd)
-    be._process_data()
-    ground_np = be.np_to_o3d(pcd.ground)
-    ground = ground_np.select_by_index(pcd.no_paves)
-    o3d.visualization.draw_geometries([ground])
-    print(len(pcd.no_paves))
+    print('hellow world')
