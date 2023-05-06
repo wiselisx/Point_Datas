@@ -246,77 +246,183 @@ class RansacGroundExtractor(BaseAlgorithm):
 
 class ReGrowSegment(BaseAlgorithm):
 
-    def _process_data(self) -> None:
-        ground_np = self.np_to_o3d(self.data.ground)
-        seed = self.seed_select(ground_np)
-        no_paves = self.find_no_paves(ground_np)
+    def __init__(self, data, theta_threshold = 20, ) -> None:
+        self.data = data
+        self.ground_np = self.np_to_o3d(self.data.ground)
+        self.seed = self.seed_select(self.ground_np)
+        self.no_paves = self.find_no_paves(self.ground_np)
         # np_clouds = np.asarray(clouds)
-        no_paves = self.find_index(self.data.ground, no_paves)
-        nebor_all = self.find_neighbour_points(ground_np)
-        curvity = self.curvature_calculation(ground_np)
-        paves = np.array(seed)
+        self.no_paves = self.find_index(self.data.ground, self.no_paves)
+        self.nebor_all = self.find_neighbour_points(self.ground_np)
+        self.curvity = self.curvature_calculation(self.ground_np)
+        self.paves = np.array(self.seed)
+        self.cosine_threshold = np.cos(np.deg2rad(theta_threshold))
+        self.curvature_threshold = 0.035
+        
 
-        while len(seed) > 0:
-            seed_now = seed[0]
-            nebor = nebor_all[seed_now]
+    def _process_data(self) -> None:
+
+        while len(self.seed) > 0:
+            seed_now = self.seed[0]
+            nebor = self.nebor_all[seed_now]
             nebor = np.asarray(nebor)
 
-            nebor_np = nebor[np.isin(nebor, paves, invert=True)]
-            nebor_new = nebor_np[np.isin(nebor_np, seed, invert=True)]
-            nebor_new = nebor_new[np.isin(nebor_new, no_paves, invert=True)]
+            nebor_np = nebor[np.isin(nebor, self.paves, invert=True)]
+            nebor_new = nebor_np[np.isin(nebor_np, self.seed, invert=True)]
+            nebor_new = nebor_new[np.isin(nebor_new, self.no_paves, invert=True)]
 
             if len(nebor_new) > 0:
-                curr_seed_normal = ground_np.normals[seed_now]  # 当前种子点的法向量
-                seed_nebor_normal = [ground_np.normals[int(i)] for i in nebor_new]  # 种子点邻域点的法向量
+                curr_seed_normal = self.ground_np.normals[seed_now]  # 当前种子点的法向量
+                seed_nebor_normal = [self.ground_np.normals[int(i)] for i in nebor_new]  # 种子点邻域点的法向量
                 dot_normal = np.fabs(np.dot(seed_nebor_normal, curr_seed_normal))
                 nebor_new = nebor_new.astype('int64')
-                curvity_now = curvity[nebor_new]
-                a = dot_normal > self.data.cosine_threshold
-                b = curvity_now < self.data.curvature_threshold
+                curvity_now = self.curvity[nebor_new]
+                a = dot_normal > self.cosine_threshold
+                b = curvity_now < self.curvature_threshold
                 c = a & b
                 paves_new = nebor_new[c]
-                paves = np.append(paves, paves_new)
-                seed = np.append(seed, paves_new)
+                self.paves = np.append(self.paves, paves_new)
+                self.seed = np.append(self.seed, paves_new)
 
-            seed = np.delete(seed, [0])
+            self.seed = np.delete(self.seed, [0])
 
-        self.data.paves = paves
+        self.data.paves = self.paves
 
 
 class DriPathSegment(BaseAlgorithm):
+    def __init__(self, data):
+        self.data = data
+        self.ground = self.data.ground
+        self.ground_o3d = self.np_to_o3d(self.ground)
+        self.ground_nor = np.asarray(self.ground_o3d.normals)
+        self.no_paves = np.array([0])
+        self.index_all = np.array(range(len(self.ground)))
+
+        driving_track_seed = self.seed_select(self.ground_o3d)
+        driving_track = self.driving_path_generation(driving_track_seed, self.ground_o3d)
+        driving_track_o3d = self.np_to_o3d(driving_track)
+        driving_track = self.find_nearest_point(self.ground_o3d, driving_track_o3d)
+
+        driving_track_o3d = self.ground_o3d.select_by_index(driving_track)
+        self.point_neighbours = self.find_nearest_point(driving_track_o3d, self.ground_o3d)
+        self.driving_track = np.asarray(driving_track_o3d.points)
+
+
+        
 
     def _process_data(self):
-        ground = self.data.ground
-        ground_o3d = self.np_to_o3d(ground)
-        ground_nor = np.asarray(ground_o3d.normals)
-        no_paves = np.array([0])
-        index_all = np.array(range(len(ground)))
 
-        driving_track_seed = self.seed_select(ground_o3d)
-        driving_track = self.driving_path_generation(driving_track_seed, ground_o3d)
-        driving_track_o3d = self.np_to_o3d(driving_track)
-        driving_track = self.find_nearest_point(ground_o3d, driving_track_o3d)
-
-        driving_track_o3d = ground_o3d.select_by_index(driving_track)
-        point_neighbours = self.find_nearest_point(driving_track_o3d, ground_o3d)
-        driving_track = np.asarray(driving_track_o3d.points)
-
-        for i in range(len(driving_track)):
-            slim = ground[point_neighbours[:, 0] == i]
-            slim_index = index_all[point_neighbours[:, 0] == i]
+        for i in range(len(self.driving_track)):
+            slim = self.ground[self.point_neighbours[:, 0] == i]
+            slim_index = self.index_all[self.point_neighbours[:, 0] == i]
             if len(slim) > 0:
-                slim_nor = ground_nor[point_neighbours[:, 0] == i]
-                slim_distance = np.sqrt(np.sum(np.power(slim - driving_track[i, :], 2), axis=1))
+                slim_nor = self.ground_nor[self.point_neighbours[:, 0] == i]
+                slim_distance = np.sqrt(np.sum(np.power(slim - self.driving_track[i, :], 2), axis=1))
                 p = slim_distance.argmin()
                 p = slim_nor[p, :]
                 a_jiao = np.fabs(np.dot(slim_nor, p))
                 c = a_jiao <= self.data.cosine_threshold
-                no_paves = np.concatenate((no_paves, slim_index[c]), axis=0)
+                self.no_paves = np.concatenate((self.no_paves, slim_index[c]), axis=0)
 
-        self.data.no_paves = np.delete(no_paves, 0, 0)
+        no_paves = np.delete(self.no_paves, 0, 0)
+        self.data.paves_o3d = self.ground_o3d.select_by_index(no_paves, invert = True)
+        paves  = self.ground_o3d.select_by_index(no_paves, invert = True)
 
+        self.data.paves = self.euclidean_cluster(paves, tolerance=0.15)
+
+    def euclidean_cluster(self,cloud, tolerance=0.2):
+        seed = self.seed_select(cloud)
+        no_paves = self.find_no_paves(cloud)
+        paves = np.asarray(cloud.points)
+        no_paves = self.find_index(paves, no_paves)
+        kdtree = o3d.geometry.KDTreeFlann(cloud)
+        paves = np.array(seed)
+        while len(seed) > 0 :
+            seed_now = seed[0]
+            k, idx, _ = kdtree.search_radius_vector_3d(cloud.points[seed_now], tolerance)
+            if k == 1 :
+                continue
+            idx = np.array(idx)
+            idx = idx[np.isin(idx, paves, invert=True)]
+            idx = idx[np.isin(idx, no_paves, invert=True)]
+            paves = np.append(paves, idx)
+            seed = np.append(seed,idx)
+            seed = np.delete(seed,[0])
+
+        return paves
     
+class DriPathSegment2(BaseAlgorithm):
 
+    def __init__(self,data):
+        
+        self.data = data
+        self.ground = self.data.ground
+        ground_o3d = self.np_to_o3d(self.ground)
+        self.ground_nor = np.asarray(ground_o3d.normals)
+        driving_track_seed = self.seed_select(ground_o3d)
+        driving_track = self.driving_path_generation(driving_track_seed, ground_o3d)
+        driving_track_o3d = self.np_to_o3d(driving_track)
+        driving_track = self.find_nearest_point(ground_o3d, driving_track_o3d)
+        self.density = self.calculate_linear_density(ground_o3d)
+        driving_track_o3d = ground_o3d.select_by_index(driving_track)
+        self.point_neighbours = self.find_nearest_point(driving_track_o3d,ground_o3d)
+        self.driving_track = np.asarray(driving_track_o3d.points)  
 
+    def _process_data(self):
+
+        index_all = np.array(range(len(self.ground)))
+        no_paves = np.array([0])
+        paves = np.array([0])
+
+        for i in range(len(self.driving_track)):
+            slim = self.ground[self.point_neighbours[:,0] == i]
+            slim_index = index_all[self.point_neighbours[:,0] == i]
+            if len(slim) > 0:
+               slim_nor = self.ground_nor[self.point_neighbours[:,0] == i]
+               slim_distance = np.sqrt(np.sum(np.power(slim - self.driving_track[i,:],2),axis = 1))
+               driving_track_point = slim_distance.argmin()
+               driving_track_point = slim_nor[driving_track_point,:]
+               included_angle = np.fabs(np.dot(slim_nor, driving_track_point))
+               no_paves_slim = included_angle <= self.data.cosine_threshold
+               paves_slim = included_angle > self.data.cosine_threshold
+
+               slim_distance = slim_distance[paves_slim]
+               if len(slim_distance) > 0:
+
+                    paves_slim_h = slim[paves_slim,2].reshape(1,-1)
+                    paves_slim = slim_index[paves_slim]
+                    arr = np.argsort(paves_slim_h)[0]
+                    paves_slim_h = np.sort(paves_slim_h)
+                    diff_arr = np.diff(paves_slim_h)[0]
+                    stop_index = np.where(diff_arr > 2 * self.density)
+                    if len(stop_index[0]) > 0:
+                         stop_index = stop_index[0]
+                         stop_index +=1
+                         stop_index = stop_index[0]
+                    else:
+                         stop_index = paves_slim_h.shape[1]
+
+                    
+                    arr = arr[:stop_index]
+                    paves_slim = paves_slim[arr]
+                    slim_distance = slim_distance[arr]
+                    arr = np.argsort(slim_distance)
+                    slim_distance = np.sort(slim_distance)
+                    diff_arr = np.diff(slim_distance)
+                    stop_index = np.where(diff_arr > 2 * self.density)
+                    if len(stop_index[0]) > 0:
+                         stop_index = stop_index[0]
+                         stop_index +=1
+                         stop_index = stop_index[0]
+                    else:
+                         stop_index = slim_distance.shape[0]
+                    arr = arr[:stop_index]
+                    paves_slim = paves_slim[arr]
+                    paves = np.concatenate((paves, paves_slim),axis=0)
+               # paves = np.concatenate((paves, slim_index[paves_slim]),axis=0)
+               no_paves = np.concatenate((no_paves, slim_index[no_paves_slim]),axis=0)
+
+        self.data.paves = np.delete(paves,0,0)     
+        self.data.no_paves = np.delete(no_paves,0,0)
 if __name__ == '__main__':
     print('hellow world')
