@@ -2,7 +2,7 @@
 Author: 夜间清风 1874032283@qq.com
 Date: 2023-03-04 20:05:50
 LastEditors: 夜间清风 1874032283@qq.com
-LastEditTime: 2023-04-08 13:50:02
+LastEditTime: 2023-05-09 20:54:44
 FilePath: \Point_Datas\sample\readdatas.py
 Description: 软件代码的算法部分。
 '''
@@ -11,7 +11,10 @@ import CSF
 import numpy as np
 import open3d as o3d
 from abc import ABC, abstractmethod
-
+from sklearn import svm
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import joblib
 
 class ReadDatas:
 
@@ -73,7 +76,9 @@ class BaseAlgorithm(ABC):
 
         point_neighbours = np.zeros((number, neighbour_number))
         for ik in range(number):
-            [_, idx, _] = kdtree.search_knn_vector_3d(clouds.points[ik], neighbour_number)  # K近邻搜索
+             # K近邻搜索
+            [_, idx, _] = kdtree.search_knn_vector_3d(
+                clouds.points[ik], neighbour_number) 
             point_neighbours[ik, :] = idx
 
         return point_neighbours
@@ -95,7 +100,7 @@ class BaseAlgorithm(ABC):
 
     def seed_select(self, cloud):
         vis = o3d.visualization.VisualizerWithEditing()
-        vis.create_window(window_name='Open3D', visible=True)
+        vis.create_window(window_name='种子点选取', visible=True)
         vis.add_geometry(cloud)
         vis.run()
         seed = vis.get_picked_points()
@@ -113,7 +118,7 @@ class BaseAlgorithm(ABC):
 
     def paves_cutting(self, ground):
         vis = o3d.visualization.VisualizerWithEditing()
-        vis.create_window(window_name='Open3D', visible=True)
+        vis.create_window(window_name='区域切割', visible=True)
         vis.add_geometry(ground)
         vis.run()
         geometry = vis.get_cropped_geometry()
@@ -161,7 +166,9 @@ class BaseAlgorithm(ABC):
         point_neighbours = np.zeros((number, neighbour_number))
 
         for ik in range(number):
-            [_, idx, _] = kdtree.search_knn_vector_3d(clouds2.points[ik], neighbour_number)  # K近邻搜索
+            # K近邻搜索
+            [_, idx, _] = kdtree.search_knn_vector_3d(
+                clouds2.points[ik], neighbour_number)  
             point_neighbours[ik, :] = idx
         return point_neighbours
 
@@ -290,7 +297,7 @@ class ReGrowSegment(BaseAlgorithm):
 
 
 class DriPathSegment(BaseAlgorithm):
-    def __init__(self, data):
+    def __init__(self, data, theta_threshold = 20,):
         self.data = data
         self.ground = self.data.ground
         self.ground_o3d = self.np_to_o3d(self.ground)
@@ -306,8 +313,8 @@ class DriPathSegment(BaseAlgorithm):
         driving_track_o3d = self.ground_o3d.select_by_index(driving_track)
         self.point_neighbours = self.find_nearest_point(driving_track_o3d, self.ground_o3d)
         self.driving_track = np.asarray(driving_track_o3d.points)
-
-
+        self.theta_threshold = theta_threshold
+        self.cosine_threshold = np.cos(np.deg2rad(self.theta_threshold))
         
 
     def _process_data(self):
@@ -321,14 +328,13 @@ class DriPathSegment(BaseAlgorithm):
                 p = slim_distance.argmin()
                 p = slim_nor[p, :]
                 a_jiao = np.fabs(np.dot(slim_nor, p))
-                c = a_jiao <= self.data.cosine_threshold
+                c = a_jiao <= self.cosine_threshold
                 self.no_paves = np.concatenate((self.no_paves, slim_index[c]), axis=0)
 
-        no_paves = np.delete(self.no_paves, 0, 0)
-        self.data.paves_o3d = self.ground_o3d.select_by_index(no_paves, invert = True)
-        paves  = self.ground_o3d.select_by_index(no_paves, invert = True)
-
-        self.data.paves = self.euclidean_cluster(paves, tolerance=0.15)
+        self.data.side = np.delete(self.no_paves, 0, 0)
+        self.data.no_side= self.ground_o3d.select_by_index(self.data.side, invert = True)
+        self.data.side = self.ground_o3d.select_by_index(self.data.side)
+        self.data.paves = self.euclidean_cluster(self.data.no_side, tolerance=0.15)
 
     def euclidean_cluster(self,cloud, tolerance=0.2):
         seed = self.seed_select(cloud)
@@ -353,7 +359,7 @@ class DriPathSegment(BaseAlgorithm):
     
 class DriPathSegment2(BaseAlgorithm):
 
-    def __init__(self,data):
+    def __init__(self, data, theta_threshold = 20, dis_density = 2, h_density = 2):
         
         self.data = data
         self.ground = self.data.ground
@@ -366,7 +372,11 @@ class DriPathSegment2(BaseAlgorithm):
         self.density = self.calculate_linear_density(ground_o3d)
         driving_track_o3d = ground_o3d.select_by_index(driving_track)
         self.point_neighbours = self.find_nearest_point(driving_track_o3d,ground_o3d)
-        self.driving_track = np.asarray(driving_track_o3d.points)  
+        self.driving_track = np.asarray(driving_track_o3d.points)
+        self.theta_threshold = theta_threshold
+        self.cosine_threshold = np.cos(np.deg2rad(self.theta_threshold))
+        self.dis_density = dis_density
+        self.h_density = h_density
 
     def _process_data(self):
 
@@ -383,8 +393,8 @@ class DriPathSegment2(BaseAlgorithm):
                driving_track_point = slim_distance.argmin()
                driving_track_point = slim_nor[driving_track_point,:]
                included_angle = np.fabs(np.dot(slim_nor, driving_track_point))
-               no_paves_slim = included_angle <= self.data.cosine_threshold
-               paves_slim = included_angle > self.data.cosine_threshold
+               no_paves_slim = included_angle <= self.cosine_threshold
+               paves_slim = included_angle > self.cosine_threshold
 
                slim_distance = slim_distance[paves_slim]
                if len(slim_distance) > 0:
@@ -394,7 +404,7 @@ class DriPathSegment2(BaseAlgorithm):
                     arr = np.argsort(paves_slim_h)[0]
                     paves_slim_h = np.sort(paves_slim_h)
                     diff_arr = np.diff(paves_slim_h)[0]
-                    stop_index = np.where(diff_arr > 2 * self.density)
+                    stop_index = np.where(diff_arr > self.h_density * self.density)
                     if len(stop_index[0]) > 0:
                          stop_index = stop_index[0]
                          stop_index +=1
@@ -409,7 +419,7 @@ class DriPathSegment2(BaseAlgorithm):
                     arr = np.argsort(slim_distance)
                     slim_distance = np.sort(slim_distance)
                     diff_arr = np.diff(slim_distance)
-                    stop_index = np.where(diff_arr > 2 * self.density)
+                    stop_index = np.where(diff_arr > self.dis_density * self.density)
                     if len(stop_index[0]) > 0:
                          stop_index = stop_index[0]
                          stop_index +=1
@@ -419,10 +429,83 @@ class DriPathSegment2(BaseAlgorithm):
                     arr = arr[:stop_index]
                     paves_slim = paves_slim[arr]
                     paves = np.concatenate((paves, paves_slim),axis=0)
-               # paves = np.concatenate((paves, slim_index[paves_slim]),axis=0)
                no_paves = np.concatenate((no_paves, slim_index[no_paves_slim]),axis=0)
 
         self.data.paves = np.delete(paves,0,0)     
         self.data.no_paves = np.delete(no_paves,0,0)
+
+
+class SVM(BaseAlgorithm):
+
+    def __init__(self, data, path):
+        self.data = data;
+        self.ground = data.ground
+        self.ground_o3d = self.np_to_o3d(self.ground)
+        self.ground_nor = np.asarray(self.ground_o3d.normals)
+        self.feature_vector = self.get_feature_vector()
+        self.path = path
+
+    def _process_data(self):
+        clf = joblib.load(self.path)
+        y_pred_all = clf.predict(self.feature_vector)
+        index = np.array(range(len(self.data.ground)))
+        index = index[y_pred_all]
+        # self.data.side =  self.ground_o3d.select_by_index(index, ivert = True)
+        self.data.side = index
+        self.data.no_side = self.ground_o3d.select_by_index(index)
+        self.data.paves = self.euclidean_cluster(self.data.no_side)
+
+
+    def euclidean_cluster(self,cloud, tolerance=0.2):
+        seed = self.seed_select(cloud)
+        no_paves = self.find_no_paves(cloud)
+        paves = np.asarray(cloud.points)
+        no_paves = self.find_index(paves, no_paves)
+        kdtree = o3d.geometry.KDTreeFlann(cloud)
+        paves = np.array(seed)
+        while len(seed) > 0 :
+            seed_now = seed[0]
+            k, idx, _ = kdtree.search_radius_vector_3d(cloud.points[seed_now], tolerance)
+            if k == 1 :
+                continue
+            idx = np.array(idx)
+            idx = idx[np.isin(idx, paves, invert=True)]
+            idx = idx[np.isin(idx, no_paves, invert=True)]
+            paves = np.append(paves, idx)
+            seed = np.append(seed,idx)
+            seed = np.delete(seed,[0])
+        return paves
+
+        
+
+    def get_feature_vector(self):
+        ground_tree = o3d.geometry.KDTreeFlann(self.ground_o3d)
+        n = len(self.ground)
+        feature_vector = np.zeros((n,2))
+        for i in range(n):
+            [num, idx, _] = ground_tree.search_radius_vector_3d(self.ground_o3d.points[i], 0.2)
+            point_neighbour = self.ground[idx,:]
+            point_neighbour_max = point_neighbour[:,2].max(axis=0)
+            point_neighbour_min = point_neighbour[:,2].min(axis=0)
+            point_neighbour_h = point_neighbour_max - point_neighbour_min
+            point_neighbour_var = np.var(point_neighbour[:,2],axis=0)
+            feature_vector[i,:] = [point_neighbour_h,point_neighbour_var]
+        feature_vector = np.hstack((feature_vector,self.ground_nor.reshape(-1,3)))
+        return feature_vector
+
 if __name__ == '__main__':
-    print('hellow world')
+    from sklearn import svm
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+    import joblib
+    path = 'D:\project\Point_Datas\Point Cloud Data\Corner.ply'
+    pcd =  ReadDatas(path)
+    gpf = GpfGroundExtractor()
+    gpf.set_data(pcd)
+    gpf._process_data()
+    path = 'SVM_model.pkl'
+    svm = SVM(pcd,path)
+    svm._process_data()
+    paves = svm.no_side.select_by_index(pcd.paves)
+    o3d.visualization.draw_geometries([paves])
+
