@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1315, 961)
+        MainWindow.resize(1311, 952)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -304,7 +304,7 @@ class Ui_MainWindow(object):
         self.scrollArea_1.setWidgetResizable(True)
         self.scrollArea_1.setObjectName("scrollArea_1")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 524, 1050))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1065, 1050))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_5.setContentsMargins(16, 16, 16, 0)
@@ -543,7 +543,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollArea_2.setObjectName("scrollArea_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 1086, 797))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 1082, 788))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.verticalLayout_28 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_2)
         self.verticalLayout_28.setObjectName("verticalLayout_28")
@@ -896,7 +896,7 @@ class Ui_MainWindow(object):
         self.scrollArea_5.setWidgetResizable(True)
         self.scrollArea_5.setObjectName("scrollArea_5")
         self.scrollAreaWidgetContents_7 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_7.setGeometry(QtCore.QRect(0, 0, 1086, 797))
+        self.scrollAreaWidgetContents_7.setGeometry(QtCore.QRect(0, 0, 1082, 788))
         self.scrollAreaWidgetContents_7.setObjectName("scrollAreaWidgetContents_7")
         self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_7)
         self.verticalLayout_11.setObjectName("verticalLayout_11")
@@ -1846,10 +1846,135 @@ class Ui_MainWindow(object):
         self.tabWidget.setObjectName("tabWidget")
         self.reg = QtWidgets.QWidget()
         self.reg.setObjectName("reg")
-        self.horizontalLayout_103 = QtWidgets.QHBoxLayout(self.reg)
-        self.horizontalLayout_103.setContentsMargins(-1, -1, 200, -1)
-        self.horizontalLayout_103.setObjectName("horizontalLayout_103")
+        self.horizontalLayout_19 = QtWidgets.QHBoxLayout(self.reg)
+        self.horizontalLayout_19.setContentsMargins(-1, -1, 200, -1)
+        self.horizontalLayout_19.setObjectName("horizontalLayout_19")
+        self.gpf_start_h_3 = QtWidgets.QFrame(self.reg)
+        self.gpf_start_h_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.gpf_start_h_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.gpf_start_h_3.setObjectName("gpf_start_h_3")
+        self.horizontalLayout_55 = QtWidgets.QHBoxLayout(self.gpf_start_h_3)
+        self.horizontalLayout_55.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_55.setSpacing(16)
+        self.horizontalLayout_55.setObjectName("horizontalLayout_55")
+        self.label_83 = QtWidgets.QLabel(self.gpf_start_h_3)
+        self.label_83.setMinimumSize(QtCore.QSize(70, 0))
+        self.label_83.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.label_83.setStyleSheet("QLabel{\n"
+"    font: 14px \"微软雅黑\";\n"
+"    volor: rgb(75, 75, 75);\n"
+"    \n"
+"}")
+        self.label_83.setObjectName("label_83")
+        self.horizontalLayout_55.addWidget(self.label_83)
+        self.reg_nor = QtWidgets.QDoubleSpinBox(self.gpf_start_h_3)
+        self.reg_nor.setStyleSheet("QDoubleSpinBox{\n"
+"    border: 2px solid rgb(225, 225, 225);\n"
+"    border-radius: 4px;\n"
+"    color: rgb(75, 75, 75);\n"
+"    background-color: rgb(255, 255, 255);\n"
+"    min-height: 36px;\n"
+"    font: 16px \"微软雅黑\";\n"
+"    padding-left: 12px;\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::hover{\n"
+"    border: 2px solid rgb(163, 231, 234);\n"
+"}\n"
+"    \n"
+"QDoubleSpinBox::down-arrow{\n"
+"    image: url(:/resource/resource/icon/向下.svg);\n"
+"    width: 12px;\n"
+"    height: 12px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::down-button{\n"
+"    width: 32px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::up-arrow{\n"
+"    image: url(:/resource/resource/icon/上拉.svg);\n"
+"    width: 12px;\n"
+"    height: 12px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::up-button{\n"
+"    width: 32px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}")
+        self.reg_nor.setDecimals(1)
+        self.reg_nor.setSingleStep(0.1)
+        self.reg_nor.setProperty("value", 20.0)
+        self.reg_nor.setObjectName("reg_nor")
+        self.horizontalLayout_55.addWidget(self.reg_nor)
+        self.horizontalLayout_19.addWidget(self.gpf_start_h_3)
+        self.gpf_start_h_5 = QtWidgets.QFrame(self.reg)
+        self.gpf_start_h_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.gpf_start_h_5.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.gpf_start_h_5.setObjectName("gpf_start_h_5")
+        self.horizontalLayout_56 = QtWidgets.QHBoxLayout(self.gpf_start_h_5)
+        self.horizontalLayout_56.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_56.setSpacing(16)
+        self.horizontalLayout_56.setObjectName("horizontalLayout_56")
+        self.label_84 = QtWidgets.QLabel(self.gpf_start_h_5)
+        self.label_84.setMinimumSize(QtCore.QSize(70, 0))
+        self.label_84.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.label_84.setStyleSheet("QLabel{\n"
+"    font: 14px \"微软雅黑\";\n"
+"    volor: rgb(75, 75, 75);\n"
+"    \n"
+"}")
+        self.label_84.setObjectName("label_84")
+        self.horizontalLayout_56.addWidget(self.label_84)
+        self.reg_cur = QtWidgets.QDoubleSpinBox(self.gpf_start_h_5)
+        self.reg_cur.setStyleSheet("QDoubleSpinBox{\n"
+"    border: 2px solid rgb(225, 225, 225);\n"
+"    border-radius: 4px;\n"
+"    color: rgb(75, 75, 75);\n"
+"    background-color: rgb(255, 255, 255);\n"
+"    min-height: 36px;\n"
+"    font: 16px \"微软雅黑\";\n"
+"    padding-left: 12px;\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::hover{\n"
+"    border: 2px solid rgb(163, 231, 234);\n"
+"}\n"
+"    \n"
+"QDoubleSpinBox::down-arrow{\n"
+"    image: url(:/resource/resource/icon/向下.svg);\n"
+"    width: 12px;\n"
+"    height: 12px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::down-button{\n"
+"    width: 32px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::up-arrow{\n"
+"    image: url(:/resource/resource/icon/上拉.svg);\n"
+"    width: 12px;\n"
+"    height: 12px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::up-button{\n"
+"    width: 32px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}")
+        self.reg_cur.setDecimals(3)
+        self.reg_cur.setSingleStep(0.001)
+        self.reg_cur.setProperty("value", 0.035)
+        self.reg_cur.setObjectName("reg_cur")
+        self.horizontalLayout_56.addWidget(self.reg_cur)
+        self.horizontalLayout_19.addWidget(self.gpf_start_h_5)
         self.reg_button = QtWidgets.QPushButton(self.reg)
+        self.reg_button.setMaximumSize(QtCore.QSize(100, 16777215))
         self.reg_button.setStyleSheet("QPushButton{\n"
 "    color: rgb(255, 255, 255);\n"
 "    border-radius: 4px;\n"
@@ -1870,31 +1995,77 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         self.reg_button.setObjectName("reg_button")
-        self.horizontalLayout_103.addWidget(self.reg_button)
+        self.horizontalLayout_19.addWidget(self.reg_button)
         self.tabWidget.addTab(self.reg, "")
         self.dri1 = QtWidgets.QWidget()
         self.dri1.setObjectName("dri1")
-        self.horizontalLayout_102 = QtWidgets.QHBoxLayout(self.dri1)
-        self.horizontalLayout_102.setContentsMargins(-1, -1, 400, -1)
-        self.horizontalLayout_102.setObjectName("horizontalLayout_102")
-        self.frame_19 = QtWidgets.QFrame(self.dri1)
-        self.frame_19.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_19.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_19.setObjectName("frame_19")
-        self.horizontalLayout_32 = QtWidgets.QHBoxLayout(self.frame_19)
-        self.horizontalLayout_32.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_32.setSpacing(16)
-        self.horizontalLayout_32.setObjectName("horizontalLayout_32")
-        self.label_35 = QtWidgets.QLabel(self.frame_19)
-        self.label_35.setStyleSheet("QLabel{\n"
+        self.horizontalLayout_30 = QtWidgets.QHBoxLayout(self.dri1)
+        self.horizontalLayout_30.setContentsMargins(-1, -1, 400, -1)
+        self.horizontalLayout_30.setObjectName("horizontalLayout_30")
+        self.gpf_start_h_7 = QtWidgets.QFrame(self.dri1)
+        self.gpf_start_h_7.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.gpf_start_h_7.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.gpf_start_h_7.setObjectName("gpf_start_h_7")
+        self.horizontalLayout_57 = QtWidgets.QHBoxLayout(self.gpf_start_h_7)
+        self.horizontalLayout_57.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_57.setSpacing(16)
+        self.horizontalLayout_57.setObjectName("horizontalLayout_57")
+        self.label_85 = QtWidgets.QLabel(self.gpf_start_h_7)
+        self.label_85.setMinimumSize(QtCore.QSize(70, 0))
+        self.label_85.setMaximumSize(QtCore.QSize(60, 16777215))
+        self.label_85.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
 "    volor: rgb(75, 75, 75);\n"
 "    \n"
 "}")
-        self.label_35.setObjectName("label_35")
-        self.horizontalLayout_32.addWidget(self.label_35)
-        self.horizontalLayout_102.addWidget(self.frame_19)
+        self.label_85.setObjectName("label_85")
+        self.horizontalLayout_57.addWidget(self.label_85)
+        self.dri_nor = QtWidgets.QDoubleSpinBox(self.gpf_start_h_7)
+        self.dri_nor.setStyleSheet("QDoubleSpinBox{\n"
+"    border: 2px solid rgb(225, 225, 225);\n"
+"    border-radius: 4px;\n"
+"    color: rgb(75, 75, 75);\n"
+"    background-color: rgb(255, 255, 255);\n"
+"    min-height: 36px;\n"
+"    font: 16px \"微软雅黑\";\n"
+"    padding-left: 12px;\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::hover{\n"
+"    border: 2px solid rgb(163, 231, 234);\n"
+"}\n"
+"    \n"
+"QDoubleSpinBox::down-arrow{\n"
+"    image: url(:/resource/resource/icon/向下.svg);\n"
+"    width: 12px;\n"
+"    height: 12px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::down-button{\n"
+"    width: 32px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::up-arrow{\n"
+"    image: url(:/resource/resource/icon/上拉.svg);\n"
+"    width: 12px;\n"
+"    height: 12px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::up-button{\n"
+"    width: 32px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}")
+        self.dri_nor.setDecimals(1)
+        self.dri_nor.setSingleStep(0.01)
+        self.dri_nor.setProperty("value", 20.0)
+        self.dri_nor.setObjectName("dri_nor")
+        self.horizontalLayout_57.addWidget(self.dri_nor)
+        self.horizontalLayout_30.addWidget(self.gpf_start_h_7)
         self.dri_button = QtWidgets.QPushButton(self.dri1)
+        self.dri_button.setMaximumSize(QtCore.QSize(150, 16777215))
         self.dri_button.setStyleSheet("QPushButton{\n"
 "    color: rgb(255, 255, 255);\n"
 "    border-radius: 4px;\n"
@@ -1914,7 +2085,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         self.dri_button.setObjectName("dri_button")
-        self.horizontalLayout_102.addWidget(self.dri_button)
+        self.horizontalLayout_30.addWidget(self.dri_button)
         self.tabWidget.addTab(self.dri1, "")
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
@@ -1976,6 +2147,9 @@ class Ui_MainWindow(object):
 "    width: 32px;\n"
 "    background-color: rgb(255, 255, 255);\n"
 "}")
+        self.dri2_nor.setDecimals(1)
+        self.dri2_nor.setSingleStep(0.1)
+        self.dri2_nor.setProperty("value", 20.0)
         self.dri2_nor.setObjectName("dri2_nor")
         self.horizontalLayout_104.addWidget(self.dri2_nor)
         self.gridLayout_7.addWidget(self.frame_118, 0, 0, 1, 1)
@@ -2035,6 +2209,8 @@ class Ui_MainWindow(object):
 "    width: 32px;\n"
 "    background-color: rgb(255, 255, 255);\n"
 "}")
+        self.dir2_dis.setSingleStep(0.01)
+        self.dir2_dis.setProperty("value", 2.0)
         self.dir2_dis.setObjectName("dir2_dis")
         self.horizontalLayout_105.addWidget(self.dir2_dis)
         self.gridLayout_7.addWidget(self.frame_119, 0, 1, 1, 1)
@@ -2094,11 +2270,13 @@ class Ui_MainWindow(object):
 "    width: 32px;\n"
 "    background-color: rgb(255, 255, 255);\n"
 "}")
+        self.dir2_h.setSingleStep(0.01)
+        self.dir2_h.setProperty("value", 2.0)
         self.dir2_h.setObjectName("dir2_h")
         self.horizontalLayout_106.addWidget(self.dir2_h)
         self.gridLayout_7.addWidget(self.frame_120, 0, 2, 1, 1)
-        self.pushButton_13 = QtWidgets.QPushButton(self.tab)
-        self.pushButton_13.setStyleSheet("QPushButton{\n"
+        self.dri2_button = QtWidgets.QPushButton(self.tab)
+        self.dri2_button.setStyleSheet("QPushButton{\n"
 "    color: rgb(255, 255, 255);\n"
 "    border-radius: 4px;\n"
 "    border: 0px;\n"
@@ -2116,8 +2294,8 @@ class Ui_MainWindow(object):
 "    background-color: rgb(0, 171, 182);\n"
 "}\n"
 "")
-        self.pushButton_13.setObjectName("pushButton_13")
-        self.gridLayout_7.addWidget(self.pushButton_13, 1, 2, 1, 1)
+        self.dri2_button.setObjectName("dri2_button")
+        self.gridLayout_7.addWidget(self.dri2_button, 1, 2, 1, 1)
         self.tabWidget.addTab(self.tab, "")
         self.tab_4 = QtWidgets.QWidget()
         self.tab_4.setObjectName("tab_4")
@@ -2128,45 +2306,55 @@ class Ui_MainWindow(object):
         self.frame_20.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_20.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_20.setObjectName("frame_20")
-        self.horizontalLayout_33 = QtWidgets.QHBoxLayout(self.frame_20)
-        self.horizontalLayout_33.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_33.setSpacing(16)
-        self.horizontalLayout_33.setObjectName("horizontalLayout_33")
+        self.horizontalLayout_31 = QtWidgets.QHBoxLayout(self.frame_20)
+        self.horizontalLayout_31.setObjectName("horizontalLayout_31")
         self.label_36 = QtWidgets.QLabel(self.frame_20)
+        self.label_36.setMaximumSize(QtCore.QSize(100, 16777215))
         self.label_36.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
 "    volor: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_36.setObjectName("label_36")
-        self.horizontalLayout_33.addWidget(self.label_36)
-        self.lineEdit_9 = QtWidgets.QLineEdit(self.frame_20)
-        self.lineEdit_9.setStyleSheet("QLineEdit{\n"
+        self.horizontalLayout_31.addWidget(self.label_36)
+        self.csf_side_com_2 = QtWidgets.QComboBox(self.frame_20)
+        self.csf_side_com_2.setStyleSheet("QComboBox{\n"
 "    border: 2px solid rgb(225, 225, 225);\n"
 "    border-radius: 4px;\n"
-"    color: rgb(202, 202, 202);\n"
+"    color: rgb(75, 75, 75);\n"
 "    background-color: rgb(255, 255, 255);\n"
 "    min-height: 36px;\n"
+"    \n"
 "    font: 16px \"微软雅黑\";\n"
 "    padding-left: 12px;\n"
-"    border-iamge: url(:/img/icon/Search.svg) 12px;\n"
+"\n"
 "}\n"
 "\n"
-"QLineEdit::hover{\n"
+"QComboBox::hover{\n"
 "    border: 2px solid rgb(163, 231, 234);\n"
 "}\n"
+"    \n"
 "\n"
-"QLineEdit::focus{\n"
-"    border: 2px solid rgb(163, 231, 234);\n"
-"    color: rgb(75, 75, 75);\n"
+"QComboBox::down-arrow{\n"
+"    \n"
+"    image: url(:/resource/resource/icon/向下.svg);\n"
+"    width: 14px;\n"
+"    height: 14px;\n"
+"    background-color: rgb(255, 255, 255);\n"
 "}\n"
 "\n"
-"")
-        self.lineEdit_9.setObjectName("lineEdit_9")
-        self.horizontalLayout_33.addWidget(self.lineEdit_9)
+"QComboBox::drop-down{\n"
+"    border-width：14px;\n"
+"    width: 34px;\n"
+"    background-color: rgb(255, 255, 255);\n"
+"}")
+        self.csf_side_com_2.setObjectName("csf_side_com_2")
+        self.csf_side_com_2.addItem("")
+        self.horizontalLayout_31.addWidget(self.csf_side_com_2)
         self.horizontalLayout_107.addWidget(self.frame_20)
-        self.pushButton_10 = QtWidgets.QPushButton(self.tab_4)
-        self.pushButton_10.setStyleSheet("QPushButton{\n"
+        self.svm_button = QtWidgets.QPushButton(self.tab_4)
+        self.svm_button.setMaximumSize(QtCore.QSize(100, 16777215))
+        self.svm_button.setStyleSheet("QPushButton{\n"
 "    color: rgb(255, 255, 255);\n"
 "    border-radius: 4px;\n"
 "    border: 0px;\n"
@@ -2184,8 +2372,8 @@ class Ui_MainWindow(object):
 "    background-color: rgb(0, 171, 182);\n"
 "}\n"
 "")
-        self.pushButton_10.setObjectName("pushButton_10")
-        self.horizontalLayout_107.addWidget(self.pushButton_10)
+        self.svm_button.setObjectName("svm_button")
+        self.horizontalLayout_107.addWidget(self.svm_button)
         self.tabWidget.addTab(self.tab_4, "")
         self.horizontalLayout_13.addWidget(self.tabWidget)
         self.verticalLayout_12.addWidget(self.frame_37)
@@ -2427,9 +2615,9 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(2)
-        self.tabWidget_2.setCurrentIndex(2)
-        self.tabWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(3)
+        self.tabWidget_2.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         self.sidebar.currentRowChanged['int'].connect(self.stackedWidget.setCurrentIndex)
         self.exit.clicked.connect(MainWindow.close)
         self.amplify.clicked.connect(MainWindow.showFullScreen)
@@ -2441,6 +2629,11 @@ class Ui_MainWindow(object):
         self.ground_button.clicked.connect(MainWindow.ground_data_show)
         self.gpf_button.clicked.connect(MainWindow.gpf_compute)
         self.ra_button.clicked.connect(MainWindow.ra_compute)
+        self.reg_button.clicked.connect(MainWindow.reg)
+        self.dri_button.clicked.connect(MainWindow.dri1)
+        self.dri2_button.clicked.connect(MainWindow.dri2)
+        self.svm_button.clicked.connect(MainWindow.svm)
+        self.road_button.clicked.connect(MainWindow.road_show)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -2472,27 +2665,27 @@ class Ui_MainWindow(object):
         self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-weight:496; color:#4b4b4b;\">数据导入与可视化</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; color:#15c5ce;\">Game</span><span style=\" font-family:\'PingFang SC\';\">  </span><span style=\" font-family:\'Microsoft YaHei UI\'; color:#a3a3a3;\">2 days ago</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'PingFang SC\';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\';\">本数据导入模块与可视化模块均采用微软开源的open3d库<br /><br /></span><span style=\" font-family:\'Microsoft YaHei UI\'; color:#4b4b4b;\">本软件支持多种数据导入格式，例如xyz、xyzn、xyzrgb、pts、ply、pcd。在数据可是可视化页面当中，支持对点与区域的选取，并进行保存。</span></p></body></html>"))
+"</style></head><body style=\" font-family:\'SimSun\'; font-size:7.2pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; font-weight:496; color:#4b4b4b;\">数据导入与可视化</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; color:#15c5ce;\">Game</span><span style=\" font-family:\'PingFang SC\'; font-size:9pt;\">  </span><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; color:#a3a3a3;\">2 days ago</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'PingFang SC\'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt;\">本数据导入模块与可视化模块均采用微软开源的open3d库<br /><br /></span><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; color:#4b4b4b;\">本软件支持多种数据导入格式，例如xyz、xyzn、xyzrgb、pts、ply、pcd。在数据可是可视化页面当中，支持对点与区域的选取，并进行保存。</span></p></body></html>"))
         self.textBrowser_2.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-weight:496; color:#4b4b4b;\">地面过滤</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; color:#15c5ce;\">Game</span><span style=\" font-family:\'PingFang SC\';\">  </span><span style=\" font-family:\'Microsoft YaHei UI\'; color:#a3a3a3;\">2 days ago</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'PingFang SC\';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\';\">地面过滤有助于减少噪声和提高提取效率，因为不需要对地面上的点进行进一步的处理。此外，地面过滤还可以减少提取出的假阳性（即错误的道路提取），从而提高道路提取的准确性。<br /><br /></span><span style=\" font-family:\'Microsoft YaHei UI\'; color:#4b4b4b;\">本软件提供三种算法对地面进行过滤，分别是布料滤波算法，将点云模型进行导致，模拟布料下落覆盖模型的过程，对地面进行提取。其次是GPF与Ransac算法，估计地面的平面方程，</span></p></body></html>"))
+"</style></head><body style=\" font-family:\'SimSun\'; font-size:7.2pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; font-weight:496; color:#4b4b4b;\">地面过滤</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; color:#15c5ce;\">Game</span><span style=\" font-family:\'PingFang SC\'; font-size:9pt;\">  </span><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; color:#a3a3a3;\">2 days ago</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'PingFang SC\'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt;\">地面过滤有助于减少噪声和提高提取效率，因为不需要对地面上的点进行进一步的处理。此外，地面过滤还可以减少提取出的假阳性（即错误的道路提取），从而提高道路提取的准确性。<br /><br /></span><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; color:#4b4b4b;\">本软件提供三种算法对地面进行过滤，分别是布料滤波算法，将点云模型进行导致，模拟布料下落覆盖模型的过程，对地面进行提取。其次是GPF与Ransac算法，估计地面的平面方程，</span></p></body></html>"))
         self.textBrowser_3.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-weight:496; color:#4b4b4b;\">路面提取</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; color:#15c5ce;\">Game</span><span style=\" font-family:\'PingFang SC\';\">  </span><span style=\" font-family:\'Microsoft YaHei UI\'; color:#a3a3a3;\">2 days ago</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'PingFang SC\';\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\';\">点云数据在经过地面过滤以后，从地面中提取出路面点。<br /><br /></span><span style=\" font-family:\'Microsoft YaHei UI\'; color:#4b4b4b;\">本软件提供四种方法对路面进行提取，生长点域法与行车轨迹提取法是基于路面的形状特征进行提取，而支持向量机与神经网络采用的是使用标注数据进行训练，获取提取路面的模型，使用模型判断地面点云哪些点属于路缘点，实现路面与地面的分离。</span></p></body></html>"))
+"</style></head><body style=\" font-family:\'SimSun\'; font-size:7.2pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; font-weight:496; color:#4b4b4b;\">路面提取</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; color:#15c5ce;\">Game</span><span style=\" font-family:\'PingFang SC\'; font-size:9pt;\">  </span><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; color:#a3a3a3;\">2 days ago</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'PingFang SC\'; font-size:9pt;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt;\">点云数据在经过地面过滤以后，从地面中提取出路面点。<br /><br /></span><span style=\" font-family:\'Microsoft YaHei UI\'; font-size:9pt; color:#4b4b4b;\">本软件提供四种方法对路面进行提取，生长点域法与行车轨迹提取法是基于路面的形状特征进行提取，而支持向量机与神经网络采用的是使用标注数据进行训练，获取提取路面的模型，使用模型判断地面点云哪些点属于路缘点，实现路面与地面的分离。</span></p></body></html>"))
         self.label_8.setText(_translate("MainWindow", "当前界面"))
         self.label_9.setText(_translate("MainWindow", "数据导入"))
         self.label_26.setText(_translate("MainWindow", "文件路径"))
@@ -2534,19 +2727,21 @@ class Ui_MainWindow(object):
         self.ground_minh.setText(_translate("MainWindow", "23232323"))
         self.label_24.setText(_translate("MainWindow", "当前界面"))
         self.label_25.setText(_translate("MainWindow", "路面提取"))
+        self.label_83.setText(_translate("MainWindow", "法向量阈值"))
+        self.label_84.setText(_translate("MainWindow", "曲率阈值"))
         self.reg_button.setText(_translate("MainWindow", "开始计算"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.reg), _translate("MainWindow", "点域生长算法"))
-        self.label_35.setText(_translate("MainWindow", "法向量夹角"))
+        self.label_85.setText(_translate("MainWindow", "法向量阈值"))
         self.dri_button.setText(_translate("MainWindow", "行车轨道线生成"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.dri1), _translate("MainWindow", "行车轨迹算法聚类"))
         self.label_90.setText(_translate("MainWindow", "法向量夹角"))
         self.label_91.setText(_translate("MainWindow", "距离阈值倍数"))
         self.label_92.setText(_translate("MainWindow", "高度阈值倍数"))
-        self.pushButton_13.setText(_translate("MainWindow", "开始计算"))
+        self.dri2_button.setText(_translate("MainWindow", "开始计算"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "行车轨迹算法筛分"))
         self.label_36.setText(_translate("MainWindow", "选择模型"))
-        self.lineEdit_9.setPlaceholderText(_translate("MainWindow", "示例：PyQt5-master"))
-        self.pushButton_10.setText(_translate("MainWindow", "开始计算"))
+        self.csf_side_com_2.setItemText(0, _translate("MainWindow", "法向量与局部高度差模型"))
+        self.svm_button.setText(_translate("MainWindow", "开始计算"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "支持向量机算法"))
         self.label_44.setText(_translate("MainWindow", "点云总数"))
         self.road_button.setText(_translate("MainWindow", "数据展示"))

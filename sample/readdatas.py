@@ -15,6 +15,7 @@ from sklearn import svm
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import joblib
+from PyQt5.QtWidgets import QApplication, QMessageBox
 
 class ReadDatas:
 
@@ -127,21 +128,43 @@ class BaseAlgorithm(ABC):
         return geometry
 
     def find_no_paves(self, ground):
+        # app = QApplication([])
+        message_box = QMessageBox()
+        message_box.setIcon(QMessageBox.Question)
+        message_box.setText("是否继续区域分割")
+        message_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        message_box.setDefaultButton(QMessageBox.No)
         a = True
         geometrys = np.zeros((1, 3))
 
         while a:
             geometry = self.paves_cutting(ground)
             geometrys = np.concatenate((geometrys, geometry), axis=0)
-            input_1 = input('按Y或者y继续')
-            if input_1 == 'y' or input_1 == 'Y':
+            result = message_box.exec_()
+            if result == QMessageBox.Yes:
                 a = True
             else:
                 a = False
         geometrys = np.delete(geometrys, [0], axis=0)
-
+        # app.exec_()
         return geometrys
+    
+    # def find_no_paves(self, ground):
+      
+    #     a = True
+    #     geometrys = np.zeros((1, 3))
 
+    #     while a:
+    #         geometry = self.paves_cutting(ground)
+    #         geometrys = np.concatenate((geometrys, geometry), axis=0)
+    #         input_1 = input('按Y或者y继续')
+    #         if input_1 == 'y' or input_1 == 'Y':
+    #             a = True
+    #         else:
+    #             a = False
+    #     geometrys = np.delete(geometrys, [0], axis=0)
+    #     return geometrys
+    
     def curvature_calculation(self, clouds: 'o3d', neighbour_number=30):
         num_of_pts = len(clouds.points)  # 点云点的个数
         clouds.estimate_covariances(o3d.geometry.KDTreeSearchParamKNN(neighbour_number))
@@ -253,7 +276,7 @@ class RansacGroundExtractor(BaseAlgorithm):
 
 class ReGrowSegment(BaseAlgorithm):
 
-    def __init__(self, data, theta_threshold = 20, ) -> None:
+    def __init__(self, data, theta_threshold = 20, curvature_threshold = 0.035) -> None:
         self.data = data
         self.ground_np = self.np_to_o3d(self.data.ground)
         self.seed = self.seed_select(self.ground_np)
@@ -264,7 +287,7 @@ class ReGrowSegment(BaseAlgorithm):
         self.curvity = self.curvature_calculation(self.ground_np)
         self.paves = np.array(self.seed)
         self.cosine_threshold = np.cos(np.deg2rad(theta_threshold))
-        self.curvature_threshold = 0.035
+        self.curvature_threshold = curvature_threshold
         
 
     def _process_data(self) -> None:
