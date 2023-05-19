@@ -11,6 +11,7 @@ class ReadDatas:
         self.cloud = cloud
         self.datas = o3d.io.read_point_cloud(self.cloud)
         self.xyz = np.asarray(self.datas.points)
+        self.xyz_num = ;en(self.xyz)
         self.ground = None
         self.non_ground = None
         self.neighbour_number = 30

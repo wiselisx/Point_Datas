@@ -23,9 +23,13 @@ class ReadDatas:
         self.path: str = path
         self.pcd = self.read_point_cloud()
         self.pcd_np = np.asarray(self.pcd.points)
+        self.pcd_hmax = self.pcd.get_max_bound()[2]
+        self.pcd_hmin = self.pcd.get_min_bound()[2]
+        self.pcd_num = len(self.pcd_np)
         self.theta_threshold = 20
         self.cosine_threshold = np.cos(np.deg2rad(self.theta_threshold))
         self.curvature_threshold = 0.035
+        
 
     def read_point_cloud(self):
         '''
@@ -221,7 +225,7 @@ class BaseAlgorithm(ABC):
 
         driving_track = np.delete(driving_track, 0, axis=0)
         return driving_track
-
+    
     def postprocess_data(self) -> None:
         # 公共的后处理逻辑
         pass
@@ -243,6 +247,8 @@ class GpfGroundExtractor(BaseAlgorithm):
 
         self.data.ground = seed
         self.data.no_ground = xyz[np.abs(h) >= ground_h]
+        self.data.ground_num = len(self.data.ground)
+
 
 
 class CsfGroundExtractor(BaseAlgorithm):
@@ -262,6 +268,7 @@ class CsfGroundExtractor(BaseAlgorithm):
         self.no_ground = np.asarray(self.no_ground)
         self.data.ground = self.data.pcd_np[self.ground, :]
         self.data.no_ground = self.data.pcd_np[self.no_ground, :]
+        self.data.ground_num = len(self.data.ground)
 
 
 class RansacGroundExtractor(BaseAlgorithm):
@@ -272,6 +279,7 @@ class RansacGroundExtractor(BaseAlgorithm):
         inliers = np.array(inliers)
         self.data.ground = self.data.pcd_np[inliers, :]
         self.data.no_ground = np.delete(self.data.pcd_np, inliers, axis=0)
+        self.data.ground_num = len(self.data.ground)
 
 
 class ReGrowSegment(BaseAlgorithm):
@@ -317,6 +325,7 @@ class ReGrowSegment(BaseAlgorithm):
             self.seed = np.delete(self.seed, [0])
 
         self.data.paves = self.paves
+        self.data.paves_num = len(self.data.paves)
 
 
 class DriPathSegment(BaseAlgorithm):
@@ -358,6 +367,7 @@ class DriPathSegment(BaseAlgorithm):
         self.data.no_side= self.ground_o3d.select_by_index(self.data.side, invert = True)
         self.data.side = self.ground_o3d.select_by_index(self.data.side)
         self.data.paves = self.euclidean_cluster(self.data.no_side, tolerance=0.15)
+        self.data.paves_num = len(self.data.paves)
 
     def euclidean_cluster(self,cloud, tolerance=0.2):
         seed = self.seed_select(cloud)
@@ -456,6 +466,7 @@ class DriPathSegment2(BaseAlgorithm):
 
         self.data.paves = np.delete(paves,0,0)     
         self.data.no_paves = np.delete(no_paves,0,0)
+        self.data.paves_num = len(self.data.paves)
 
 
 class SVM(BaseAlgorithm):
@@ -477,6 +488,7 @@ class SVM(BaseAlgorithm):
         self.data.side = index
         self.data.no_side = self.ground_o3d.select_by_index(index)
         self.data.paves = self.euclidean_cluster(self.data.no_side)
+        self.data.paves_num = len(self.data.paves)
 
 
     def euclidean_cluster(self,cloud, tolerance=0.2):
