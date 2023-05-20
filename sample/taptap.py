@@ -54,7 +54,7 @@ class Ui_MainWindow(object):
         self.label1_1_1 = QtWidgets.QLabel(self.frame_21)
         font = QtGui.QFont()
         font.setFamily("Lucida Handwriting")
-        font.setPointSize(-1)
+        font.setPointSize(0)
         font.setBold(False)
         font.setItalic(False)
         font.setWeight(50)
@@ -73,7 +73,7 @@ class Ui_MainWindow(object):
         self.label1_1_2 = QtWidgets.QLabel(self.frame_21)
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
-        font.setPointSize(-1)
+        font.setPointSize(0)
         font.setBold(True)
         font.setItalic(False)
         font.setWeight(62)
@@ -589,7 +589,6 @@ class Ui_MainWindow(object):
 "    min-height: 36px;\n"
 "    font: 16px \"微软雅黑\";\n"
 "    padding-left: 12px;\n"
-"    border-iamge: url(:/img/icon/Search.svg) 12px;\n"
 "}\n"
 "\n"
 "QLineEdit::hover{\n"
@@ -962,7 +961,7 @@ class Ui_MainWindow(object):
         self.csf_side.setMaximumSize(QtCore.QSize(60, 16777215))
         self.csf_side.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.csf_side.setObjectName("csf_side")
@@ -1015,7 +1014,7 @@ class Ui_MainWindow(object):
         self.csf_web.setMaximumSize(QtCore.QSize(60, 16777215))
         self.csf_web.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.csf_web.setObjectName("csf_web")
@@ -1103,7 +1102,7 @@ class Ui_MainWindow(object):
         self.label_76.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_76.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_76.setObjectName("label_76")
@@ -1165,7 +1164,7 @@ class Ui_MainWindow(object):
         self.label_77.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_77.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_77.setObjectName("label_77")
@@ -1226,7 +1225,7 @@ class Ui_MainWindow(object):
         self.label_78.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_78.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_78.setObjectName("label_78")
@@ -1286,7 +1285,7 @@ class Ui_MainWindow(object):
         self.label_79.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_79.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_79.setObjectName("label_79")
@@ -1373,7 +1372,7 @@ class Ui_MainWindow(object):
         self.label_80.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_80.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_80.setObjectName("label_80")
@@ -1434,7 +1433,7 @@ class Ui_MainWindow(object):
         self.label_81.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_81.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_81.setObjectName("label_81")
@@ -1494,7 +1493,7 @@ class Ui_MainWindow(object):
         self.label_82.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_82.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_82.setObjectName("label_82")
@@ -1879,7 +1878,7 @@ class Ui_MainWindow(object):
         self.label_83.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_83.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_83.setObjectName("label_83")
@@ -1941,7 +1940,7 @@ class Ui_MainWindow(object):
         self.label_84.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_84.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_84.setObjectName("label_84")
@@ -2032,7 +2031,7 @@ class Ui_MainWindow(object):
         self.label_85.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_85.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_85.setObjectName("label_85")
@@ -2121,7 +2120,7 @@ class Ui_MainWindow(object):
         self.label_90.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_90.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_90.setObjectName("label_90")
@@ -2183,7 +2182,7 @@ class Ui_MainWindow(object):
         self.label_91.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_91.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_91.setObjectName("label_91")
@@ -2244,7 +2243,7 @@ class Ui_MainWindow(object):
         self.label_92.setMaximumSize(QtCore.QSize(60, 16777215))
         self.label_92.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_92.setObjectName("label_92")
@@ -2329,7 +2328,7 @@ class Ui_MainWindow(object):
         self.label_36.setMaximumSize(QtCore.QSize(100, 16777215))
         self.label_36.setStyleSheet("QLabel{\n"
 "    font: 14px \"微软雅黑\";\n"
-"    volor: rgb(75, 75, 75);\n"
+"    color: rgb(75, 75, 75);\n"
 "    \n"
 "}")
         self.label_36.setObjectName("label_36")
@@ -2627,7 +2626,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(3)
         self.tabWidget_2.setCurrentIndex(2)
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(2)
         self.sidebar.currentRowChanged['int'].connect(self.stackedWidget.setCurrentIndex)
         self.exit.clicked.connect(MainWindow.close)
         self.amplify.clicked.connect(MainWindow.showFullScreen)
